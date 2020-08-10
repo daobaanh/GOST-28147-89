@@ -54,7 +54,7 @@ gost_28147_89
 // Clock generation
  always begin
  # (clk_delay);
-   forever # (clk_period/2) clk = ~clk;
+ # (clk_period/2) clk = ~clk;
  end
 
 // Initial statement
@@ -84,15 +84,19 @@ initial begin
   @ ( posedge clk ) #1 load = 1;  mode = 0;
     pdata          = swapdata(64'h00000000_00000000);
     reference_data = swapdata(64'h07F9027D_F7F7DF89);
+  @ ( posedge clk ) #1 
+    pdata          = swapdata(64'h00000000_00000001);
+  @ ( posedge clk ) #1 
+    pdata          = swapdata(64'h00000000_00000002);
   @ ( posedge clk ) #1 load = 0;
 
 
-  //  Decrypt mode
-  // @ ( posedge done );
-  // @ ( posedge clk ) #1 load = 1; mode = 1;
-  //   pdata          = swapdata(64'h07F9027D_F7F7DF89);
-  //   reference_data = swapdata(64'h0DF82802_B741A292);
-  // @ ( posedge clk ) #1 load = 0;
+//  //  Decrypt mode
+//  @ ( posedge done );
+//  @ ( posedge clk ) #1 load = 1; mode = 1;
+//    pdata          = swapdata(64'h07F9027D_F7F7DF89);
+//    reference_data = swapdata(64'h0DF82802_B741A292);
+//  @ ( posedge clk ) #1 load = 0;
 
   //$finish;
   @ ( posedge done );
@@ -112,8 +116,8 @@ always  @( posedge done )
      #1 $display("KEY: %H \nDECRYPT IN: %H \t REFOUT: %H \t OUT: %H   ....%s\n", key, pdata, reference_data, cdata, STATUS);
 
 
-always @(posedge clk)
-  #1 $display("i = %H   load=%b done=%b \t data = %H | %H", u.i, u.load, u.done, data, data2);
+//always @(posedge clk)
+//  #1 $display("i = %H   load=%b done=%b \t data = %H | %H", u.i, u.load, u.done, data, data2);
 
 
 /////////////// dumping
