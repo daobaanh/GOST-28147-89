@@ -1,9 +1,9 @@
 
-
 //`define Sbox(x) {S8(x[31:28]),S7(x[27:24]),S6(x[23:20]),S5(x[19:16]),S4(x[15:12]),S3(x[11:8]),S2(x[7:4]),S1(x[3:0])}
 //`define Sbox(x) {S1(x[3:0]),S2(x[7:4]),S3(x[11:8]),S4(x[15:12]),S5(x[19:16]),S6(x[23:20]),S7(x[27:24]),S8(x[31:28])}
 `define Sbox(x) {S1(x[31:28]),S2(x[27:24]),S3(x[23:20]),S4(x[19:16]),S5(x[15:12]),S6(x[11:8]),S7(x[7:4]),S8(x[3:0])}
 
+//GOST_SBOX_TESTPARAM - for id-GostR3411-94-TestParamSet
 function [3:0] S1( input [3:0] x );
   begin
     case(x)
