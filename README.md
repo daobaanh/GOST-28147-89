@@ -1,2 +1,2 @@
-# GOST-29147-89
+# GOST-28147-89
 verilog, pipelined
