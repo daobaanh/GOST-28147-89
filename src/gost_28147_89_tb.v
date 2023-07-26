@@ -1,7 +1,40 @@
-////////////////////////////////////////////////////////////////////////////
-//   Mofified, corrected by Dao Ba-Anh (daobaanhvn1991@gmail.com), 2020   //
-////////////////////////////////////////////////////////////////////////////
-
+//======================================================================
+//
+// gost_28147_89_tb.v
+// --------------------
+// Testbench for the GOST 281477 89 encipher/decipher module.
+//
+//
+// Author: Ba-Anh Dao
+// Copyright (c) 2023, Vien NCUD KH&CN - Hoc Vien KTMM
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or
+// without modification, are permitted provided that the following
+// conditions are met:
+//
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+//
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in
+//    the documentation and/or other materials provided with the
+//    distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+// ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//======================================================================
 `timescale 1ns / 1ns
 
 module tb ();
@@ -54,7 +87,7 @@ gost_28147_89
 // Clock generation
  always begin
  # (clk_delay);
- # (clk_period/2) clk = ~clk;
+   forever # (clk_period/2) clk = ~clk;
  end
 
 // Initial statement
@@ -76,22 +109,18 @@ initial begin
 
   // key load
   @ ( posedge clk ) #1 kload = 1;
-      key = swapkey(256'h00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000000);
+      key = swapkey(256'hBE5EC200_6CFF9DCF_52354959_F1FF0CBF_E95061B5_A648C103_87069C25_997C0672);
   @ ( posedge clk ) #1 kload = 0;
 
 
   //  Crypt mode
   @ ( posedge clk ) #1 load = 1;  mode = 0;
-    pdata          = swapdata(64'h00000000_00000000);
+    pdata          = swapdata(64'h0DF82802_B741A292);
     reference_data = swapdata(64'h07F9027D_F7F7DF89);
-  @ ( posedge clk ) #1 
-    pdata          = swapdata(64'h00000000_00000001);
-  @ ( posedge clk ) #1 
-    pdata          = swapdata(64'h00000000_00000002);
   @ ( posedge clk ) #1 load = 0;
 
 
-//  //  Decrypt mode
+  //  Decrypt mode
 //  @ ( posedge done );
 //  @ ( posedge clk ) #1 load = 1; mode = 1;
 //    pdata          = swapdata(64'h07F9027D_F7F7DF89);
@@ -116,8 +145,8 @@ always  @( posedge done )
      #1 $display("KEY: %H \nDECRYPT IN: %H \t REFOUT: %H \t OUT: %H   ....%s\n", key, pdata, reference_data, cdata, STATUS);
 
 
-//always @(posedge clk)
-//  #1 $display("i = %H   load=%b done=%b \t data = %H | %H", u.i, u.load, u.done, data, data2);
+always @(posedge clk)
+  #1 $display("i = %H   load=%b done=%b \t data = %H | %H", u.round_ctr_reg, u.load, u.done, data, data2);
 
 
 /////////////// dumping
